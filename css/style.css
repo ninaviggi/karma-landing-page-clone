@@ -4,3 +4,11 @@ body {
 div {
 	border: 1px solid Chocolate;
 }
+.top-navigation {
+	background-color: #fff;
+	position: fixed;
+	width: 100%;
+	border-bottom: 1px solid #ddd; 
+	z-index: 9999;
+	display: block;
+}

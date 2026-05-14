@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.white,
     borderWidth: 1,
     borderColor: theme.colors.border,
-    borderRadius: theme.radius.md,
+    borderRadius: theme.radius.sm,
     paddingHorizontal: theme.spacing.md,
     paddingVertical: theme.spacing.md,
     fontSize: 16,

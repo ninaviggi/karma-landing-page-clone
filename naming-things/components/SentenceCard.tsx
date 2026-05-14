@@ -29,7 +29,7 @@ export const SentenceCard = ({
 const styles = StyleSheet.create({
   card: {
     backgroundColor: theme.colors.white,
-    borderRadius: theme.radius.md,
+    borderRadius: theme.radius.sm,
     padding: theme.spacing.md,
     borderWidth: 1,
     borderColor: theme.colors.border,

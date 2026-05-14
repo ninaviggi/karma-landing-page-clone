@@ -23,7 +23,7 @@ export const WonderCard = ({ question, translation, language }: Props) => (
 const styles = StyleSheet.create({
   card: {
     backgroundColor: theme.colors.accent,
-    borderRadius: theme.radius.md,
+    borderRadius: theme.radius.lg,
     padding: theme.spacing.lg,
     gap: theme.spacing.sm,
   },

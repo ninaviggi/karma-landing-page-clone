@@ -1,8 +1,8 @@
 import { useRouter } from 'expo-router';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { ActivityList } from '@/components/ActivityList';
 import { GenerateInput } from '@/components/GenerateInput';
-import { SuggestionChips } from '@/components/SuggestionChips';
 import { DEFAULT_SUGGESTIONS, LANGUAGES } from '@/constants/suggestions';
 import { theme } from '@/constants/theme';
 import { useSessionStore } from '@/stores/sessionStore';
@@ -51,8 +51,8 @@ export default function Home() {
 
         <View style={styles.section}>
           <Text style={styles.sectionLabel}>TRY SOMETHING NEW</Text>
-          <SuggestionChips
-            suggestions={DEFAULT_SUGGESTIONS}
+          <ActivityList
+            items={DEFAULT_SUGGESTIONS}
             onSelect={handleGenerate}
           />
         </View>

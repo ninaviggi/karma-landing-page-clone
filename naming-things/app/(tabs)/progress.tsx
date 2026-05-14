@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.white,
     borderWidth: 1,
     borderColor: theme.colors.border,
-    borderRadius: theme.radius.lg,
+    borderRadius: theme.radius.md,
     padding: theme.spacing.lg,
   },
   statValue: {

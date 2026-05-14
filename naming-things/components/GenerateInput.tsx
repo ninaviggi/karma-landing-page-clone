@@ -61,7 +61,7 @@ export const GenerateInput = ({ onGenerate, loading }: Props) => {
 const styles = StyleSheet.create({
   wrap: {
     backgroundColor: theme.colors.white,
-    borderRadius: theme.radius.lg,
+    borderRadius: theme.radius.md,
     borderWidth: 1,
     borderColor: theme.colors.border,
     padding: theme.spacing.md,

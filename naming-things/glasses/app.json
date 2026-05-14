@@ -1,0 +1,12 @@
+{
+  "name": "Naming Things",
+  "id": "com.namingthings.glasses",
+  "version": "0.0.1",
+  "platform": "even-hub",
+  "main": "src/main.ts",
+  "description": "Glance at a word in your field of view while you cook, draw, or build with your child.",
+  "permissions": [
+    "display",
+    "audio"
+  ]
+}

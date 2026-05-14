@@ -1,0 +1,13 @@
+{
+  "name": "naming-things-glasses",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Even Hub heads-up display for Naming Things — surfaces activity vocab and prompts in the parent's field of view.",
+  "main": "src/main.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "~5.3.0"
+  }
+}

@@ -1,65 +1,72 @@
-# Naming Things — v0.1
+# Naming Things
 
-A native mobile app for parents learning a language alongside their young child. Describe what you're about to do together; the app generates a bilingual activity guide: vocabulary, sentences, step-by-step prompts, and a wonder question to spark conversation.
+A bilingual activity guide for parents learning a language alongside their young child. Describe what you're about to do together; the app generates vocabulary, sentences, step-by-step prompts, and a wonder question to spark conversation.
 
-This is the **v0.1 MVP** built with Expo + React Native, per the product spec.
-
-## What's in v0.1
-
-- Local-only onboarding (set learning language, child age, child name)
-- Home screen with text input and activity suggestions
-- Activity generation via Claude API
-- Activity card: vocabulary, sentences, expandable steps, wonder question
-- Audio playback for all words and sentences (normal speed, platform-native TTS)
-- Vocabulary bank — persistent SQLite store across sessions
-- Basic progress view (word/sentence/session counts)
-
-Deferred to later versions: accounts/cloud sync, voice input, slow-speed audio, mid-activity translate, flashcard practice, repeat-activity intelligence, child mode, patterns, streaks.
-
-## Getting started
-
-```bash
-cd naming-things
-npm install
-cp .env.example .env
-# add your Claude API key to .env
-npm run start
-```
-
-Then open in Expo Go (iOS/Android) or run a native build.
-
-## Configuration
-
-Set the Claude API key via an Expo public env var:
-
-```
-EXPO_PUBLIC_CLAUDE_API_KEY=sk-ant-...
-```
-
-Note: `EXPO_PUBLIC_*` vars are bundled into the client. For production you'll want to proxy through a backend so the key isn't shipped to devices — for the MVP this is fine.
-
-The model is set in `services/ai.ts` (defaults to `claude-sonnet-4-6`).
-
-## TTS
-
-v0.1 uses `expo-speech` (platform-native: AVSpeechSynthesizer on iOS, TextToSpeech on Android). ElevenLabs integration with cached audio files is on the v0.2 roadmap — the `audio.ts` service is the swap-in point.
-
-## File layout
+## Layout
 
 ```
 naming-things/
-├── app/                    # expo-router routes
-│   ├── (tabs)/             # Home, Bank, Progress tabs
-│   ├── activity/[id].tsx   # Generated activity card
-│   ├── onboarding/         # First-launch setup
-│   └── _layout.tsx
-├── components/             # ActivityCard, VocabCard, AudioButton, ...
-├── services/               # ai (Claude), audio (TTS), storage (SQLite)
-├── stores/                 # Zustand: user, vocab, session
-├── constants/              # theme, prompts, suggestions
-└── types/
+├── core/                    shared, platform-agnostic
+│   ├── types.ts             type definitions
+│   ├── languages.ts         language metadata + locale helpers
+│   ├── prompts.ts           system + user prompt construction
+│   ├── ai.ts                Claude API client
+│   ├── audio.ts             TTS request shape, locale/rate helpers
+│   ├── storage.ts           StorageAdapter interface
+│   ├── sessions.ts          session domain (create / get / list)
+│   ├── vocab.ts             vocabulary queries
+│   └── index.ts             barrel
+│
+├── mobile/                  React Native (Expo Router) app
+│   ├── app/                 expo-router routes
+│   ├── components/          UI components
+│   ├── stores/              Zustand: user / vocab / session
+│   ├── constants/           theme, suggestion defaults
+│   ├── platform/            SQLite + expo-speech (implements core/storage, calls core/audio)
+│   ├── config.ts            mobile-only env access (API key)
+│   └── ...                  Expo / Metro / Babel / TS config
+│
+└── glasses/                 Even Hub app (stub)
+    ├── src/main.ts          activity playback runtime
+    ├── src/frames.ts        activity → HUD frames
+    └── app.json             Even Hub manifest
 ```
+
+`core/` has zero platform dependencies (no `expo-*`, no SQLite, no React). Both `mobile/` and `glasses/` consume it.
+
+## Path aliases
+
+Inside `mobile/`:
+- `@/*` → `mobile/*`
+- `@core/*` → `core/*`
+- `@core` → `core/index`
+
+Inside `glasses/`:
+- `@core/*` → `core/*`
+
+Wired in `tsconfig.json` (for type-checking) and `babel.config.js` via `babel-plugin-module-resolver` (for runtime). Metro's `watchFolders` includes `core/` so changes hot-reload.
+
+## Running the mobile app
+
+```bash
+cd mobile
+npm install
+cp .env.example .env        # add EXPO_PUBLIC_CLAUDE_API_KEY
+npm run start
+```
+
+Open in Expo Go (iOS/Android).
+
+## Storage
+
+`core/storage.ts` defines a `StorageAdapter` interface. `mobile/platform/storage.ts` provides `sqliteAdapter` (expo-sqlite). Glasses can implement its own adapter later, or stream activity data from a synced backend.
+
+`core/sessions.ts` and `core/vocab.ts` are storage-agnostic — they take an adapter as their first argument. This is the seam that lets the same domain logic run on phone and HUD.
+
+## TTS
+
+v0.1 uses platform-native TTS (`expo-speech`) via `mobile/platform/audio.ts`. `core/audio.ts` holds locale resolution and rate constants so any platform can compose its own speak function. ElevenLabs swap-in is a future addition that will live in `core/audio.ts`.
 
 ## Design
 
-Swiss-modern, typography-driven, generous whitespace, muted earth tones. Closer to a Braun manual than a children's app. The warmth comes from the activity, not the UI. Design tokens live in `constants/theme.ts`.
+Swiss-modern, typography-driven, muted earth tones. Tokens in `mobile/constants/theme.ts`; the prototype at `../prototype/` mirrors the same tokens.

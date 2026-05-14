@@ -1,7 +1,7 @@
 import { useRouter } from 'expo-router';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ActivityRow } from '@/components/ActivityRow';
+import { CategorySection } from '@/components/CategorySection';
 import { GenerateInput } from '@/components/GenerateInput';
 import { HOME_CATEGORIES } from '@/constants/suggestions';
 import { LANGUAGES } from '@core/index';
@@ -35,16 +35,14 @@ export default function Home() {
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.padded}>
-          <View style={styles.header}>
-            <View>
-              <Text style={styles.kicker}>NAMING THINGS</Text>
-              <Text style={styles.languagePill}>{learningLabel}</Text>
-            </View>
+        <View style={styles.header}>
+          <View>
+            <Text style={styles.kicker}>NAMING THINGS</Text>
+            <Text style={styles.languagePill}>{learningLabel}</Text>
           </View>
         </View>
 
-        <View style={[styles.padded, styles.promptBlock]}>
+        <View style={styles.promptBlock}>
           <Text style={styles.prompt}>What are we doing?</Text>
           <GenerateInput
             onGenerate={handleGenerate}
@@ -53,19 +51,17 @@ export default function Home() {
           {error ? <Text style={styles.error}>{error}</Text> : null}
         </View>
 
-        <View style={styles.sections}>
-          {HOME_CATEGORIES.map((cat) => (
-            <ActivityRow
-              key={cat.id}
-              title={cat.title}
-              subtitle={cat.subtitle}
-              items={cat.items}
-              onSelect={handleGenerate}
-            />
-          ))}
-        </View>
+        {HOME_CATEGORIES.map((cat) => (
+          <CategorySection
+            key={cat.id}
+            title={cat.title}
+            subtitle={cat.subtitle}
+            items={cat.items}
+            onSelect={handleGenerate}
+          />
+        ))}
 
-        <View style={[styles.padded, styles.summary]}>
+        <View style={styles.summary}>
           <Text style={styles.summaryText}>
             {totals.words} words · {totals.sentences} sentences
           </Text>
@@ -81,12 +77,9 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.background,
   },
   scroll: {
-    paddingTop: theme.spacing.lg,
+    padding: theme.spacing.lg,
     paddingBottom: theme.spacing.xxl,
     gap: theme.spacing.xl,
-  },
-  padded: {
-    paddingHorizontal: theme.spacing.lg,
   },
   header: {
     flexDirection: 'row',
@@ -116,9 +109,6 @@ const styles = StyleSheet.create({
   error: {
     color: '#A02020',
     fontSize: 13,
-  },
-  sections: {
-    gap: theme.spacing.xl,
   },
   summary: {
     paddingTop: theme.spacing.lg,

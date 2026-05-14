@@ -871,22 +871,21 @@ h2.section-label {
   justify-content: center;
 }
 
-/* Home — Apple Music style category sections ----------------------------- */
+/* Home — categorized vertical lists --------------------------------------- */
 
-.home-sections {
+.cat-section {
   display: flex;
   flex-direction: column;
-  gap: var(--s-xl);
+  gap: var(--s-md);
 }
 
-.section-header {
+.cat-header {
   display: flex;
   flex-direction: column;
   gap: 2px;
-  padding: 0 var(--s-lg);
 }
 
-.section-header__title {
+.cat-header__title {
   font-size: 22px;
   font-weight: 700;
   letter-spacing: -0.01em;
@@ -894,89 +893,10 @@ h2.section-label {
   margin: 0;
 }
 
-.section-header__sub {
+.cat-header__sub {
   font-size: 13px;
   color: var(--text-tertiary);
   margin: 0;
-}
-
-.activity-row {
-  display: flex;
-  gap: var(--s-md);
-  padding: var(--s-md) var(--s-lg) var(--s-xs);
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-}
-
-.activity-row::-webkit-scrollbar {
-  display: none;
-}
-
-.activity-tile {
-  flex: 0 0 220px;
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: var(--r-md);
-  padding: var(--s-md);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: var(--s-md);
-  min-height: 140px;
-  text-decoration: none;
-  color: var(--text);
-  scroll-snap-align: start;
-}
-
-.activity-tile:active {
-  background: var(--surface);
-}
-
-.activity-tile__title {
-  font-size: 19px;
-  font-weight: 600;
-  line-height: 1.2;
-  letter-spacing: -0.01em;
-}
-
-.activity-tile__meta {
-  font-size: 12px;
-  color: var(--text-tertiary);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.activity-tile__meta-chevron {
-  color: var(--text-tertiary);
-}
-
-.activity-tile--dark {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: var(--white);
-}
-
-.activity-tile--dark .activity-tile__meta,
-.activity-tile--dark .activity-tile__meta-chevron {
-  color: var(--accent-light);
-}
-
-/* Make the home screen use the full-width sections, no padded scroll */
-
-.screen--home {
-  padding: var(--s-lg) 0 96px;
-  gap: var(--s-xl);
-}
-
-.screen--home > .header,
-.screen--home > .promptBlock,
-.screen--home > .summary,
-.screen--home > .input-block {
-  padding-left: var(--s-lg);
-  padding-right: var(--s-lg);
 }
 
 /* Audio Mode -------------------------------------------------------------- */

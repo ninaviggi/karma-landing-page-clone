@@ -1,0 +1,29 @@
+{
+  "expo": {
+    "name": "Naming Things",
+    "slug": "naming-things",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "scheme": "namingthings",
+    "platforms": ["ios", "android"],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.namingthings.app"
+    },
+    "android": {
+      "package": "com.namingthings.app"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-sqlite"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "extra": {
+      "claudeApiKey": "",
+      "elevenLabsApiKey": ""
+    }
+  }
+}

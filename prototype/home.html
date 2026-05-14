@@ -8,15 +8,16 @@
 </head>
 <body>
   <div class="frame">
-    <main class="screen">
-      <header class="header">
+    <main class="screen screen--home">
+
+      <header class="header" style="padding: 0 var(--s-lg);">
         <div>
           <div class="kicker">Naming Things</div>
           <div class="language-pill">French</div>
         </div>
       </header>
 
-      <section style="display: flex; flex-direction: column; gap: var(--s-md);">
+      <section class="input-block" style="display: flex; flex-direction: column; gap: var(--s-md);">
         <h1 class="title">What are we doing?</h1>
         <div class="generate-box">
           <textarea placeholder="Type what we're doing..." rows="2">bake chocolate chip cookies</textarea>
@@ -27,36 +28,162 @@
         </div>
       </section>
 
-      <section class="section">
-        <h2 class="section-label">Try something new</h2>
-        <div class="activity-list">
-          <a href="loading.html" class="activity-list__item">
-            <span class="activity-list__title">Build a pillow fort</span>
-            <span class="activity-list__arrow" aria-hidden="true">→</span>
-          </a>
-          <a href="loading.html" class="activity-list__item">
-            <span class="activity-list__title">Go on a nature walk</span>
-            <span class="activity-list__arrow" aria-hidden="true">→</span>
-          </a>
-          <a href="loading.html" class="activity-list__item">
-            <span class="activity-list__title">Set the table</span>
-            <span class="activity-list__arrow" aria-hidden="true">→</span>
-          </a>
-          <a href="loading.html" class="activity-list__item">
-            <span class="activity-list__title">Bake banana bread</span>
-            <span class="activity-list__arrow" aria-hidden="true">→</span>
-          </a>
-          <a href="loading.html" class="activity-list__item">
-            <span class="activity-list__title">Plant seeds in a pot</span>
-            <span class="activity-list__arrow" aria-hidden="true">→</span>
-          </a>
-        </div>
-      </section>
+      <div class="home-sections">
 
-      <div class="summary">
+        <section>
+          <div class="section-header">
+            <h2 class="section-header__title">For right now</h2>
+            <p class="section-header__sub">Tuesday afternoon · 3:14 pm</p>
+          </div>
+          <div class="activity-row">
+            <a href="loading.html" class="activity-tile activity-tile--dark">
+              <span class="activity-tile__title">Snack time, side by side</span>
+              <span class="activity-tile__meta">
+                <span>Food vocab</span><span class="activity-tile__meta-chevron">→</span>
+              </span>
+            </a>
+            <a href="loading.html" class="activity-tile">
+              <span class="activity-tile__title">Draw the view from the window</span>
+              <span class="activity-tile__meta">
+                <span>Quiet · 20 min</span><span class="activity-tile__meta-chevron">→</span>
+              </span>
+            </a>
+            <a href="loading.html" class="activity-tile">
+              <span class="activity-tile__title">Build with magnetic tiles</span>
+              <span class="activity-tile__meta">
+                <span>Shapes &amp; colors</span><span class="activity-tile__meta-chevron">→</span>
+              </span>
+            </a>
+          </div>
+        </section>
+
+        <section>
+          <div class="section-header">
+            <h2 class="section-header__title">Your favorites</h2>
+            <p class="section-header__sub">The ones you keep coming back to</p>
+          </div>
+          <div class="activity-row">
+            <a href="loading.html" class="activity-tile">
+              <span class="activity-tile__title">Bake chocolate chip cookies</span>
+              <span class="activity-tile__meta">
+                <span>Done 3×</span><span class="activity-tile__meta-chevron">→</span>
+              </span>
+            </a>
+            <a href="loading.html" class="activity-tile">
+              <span class="activity-tile__title">Drawing dragons</span>
+              <span class="activity-tile__meta">
+                <span>Done 2×</span><span class="activity-tile__meta-chevron">→</span>
+              </span>
+            </a>
+            <a href="loading.html" class="activity-tile">
+              <span class="activity-tile__title">Build a pillow fort</span>
+              <span class="activity-tile__meta">
+                <span>Done 2×</span><span class="activity-tile__meta-chevron">→</span>
+              </span>
+            </a>
+            <a href="loading.html" class="activity-tile">
+              <span class="activity-tile__title">Nature walk in the park</span>
+              <span class="activity-tile__meta">
+                <span>Done 1×</span><span class="activity-tile__meta-chevron">→</span>
+              </span>
+            </a>
+          </div>
+        </section>
+
+        <section>
+          <div class="section-header">
+            <h2 class="section-header__title">In season</h2>
+            <p class="section-header__sub">It's December · short days, long evenings</p>
+          </div>
+          <div class="activity-row">
+            <a href="loading.html" class="activity-tile">
+              <span class="activity-tile__title">Bake holiday cookies together</span>
+              <span class="activity-tile__meta">
+                <span>Cozy · 45 min</span><span class="activity-tile__meta-chevron">→</span>
+              </span>
+            </a>
+            <a href="loading.html" class="activity-tile">
+              <span class="activity-tile__title">Make a paper snowflake</span>
+              <span class="activity-tile__meta">
+                <span>Quiet · 15 min</span><span class="activity-tile__meta-chevron">→</span>
+              </span>
+            </a>
+            <a href="loading.html" class="activity-tile">
+              <span class="activity-tile__title">Wrap a small gift</span>
+              <span class="activity-tile__meta">
+                <span>Fine motor</span><span class="activity-tile__meta-chevron">→</span>
+              </span>
+            </a>
+          </div>
+        </section>
+
+        <section>
+          <div class="section-header">
+            <h2 class="section-header__title">Crafts &amp; chores</h2>
+            <p class="section-header__sub">Hands-on, vocab-rich</p>
+          </div>
+          <div class="activity-row">
+            <a href="loading.html" class="activity-tile">
+              <span class="activity-tile__title">Set the table</span>
+              <span class="activity-tile__meta">
+                <span>Routine · 10 min</span><span class="activity-tile__meta-chevron">→</span>
+              </span>
+            </a>
+            <a href="loading.html" class="activity-tile">
+              <span class="activity-tile__title">Sort the laundry by color</span>
+              <span class="activity-tile__meta">
+                <span>Colors · 15 min</span><span class="activity-tile__meta-chevron">→</span>
+              </span>
+            </a>
+            <a href="loading.html" class="activity-tile">
+              <span class="activity-tile__title">Paint pasta jewelry</span>
+              <span class="activity-tile__meta">
+                <span>Crafts · 30 min</span><span class="activity-tile__meta-chevron">→</span>
+              </span>
+            </a>
+            <a href="loading.html" class="activity-tile">
+              <span class="activity-tile__title">Water the houseplants</span>
+              <span class="activity-tile__meta">
+                <span>Nature · 10 min</span><span class="activity-tile__meta-chevron">→</span>
+              </span>
+            </a>
+          </div>
+        </section>
+
+        <section>
+          <div class="section-header">
+            <h2 class="section-header__title">Diversify your vocab</h2>
+            <p class="section-header__sub">You've done a lot with food and animals · try movement</p>
+          </div>
+          <div class="activity-row">
+            <a href="loading.html" class="activity-tile activity-tile--dark">
+              <span class="activity-tile__title">Dance party in the kitchen</span>
+              <span class="activity-tile__meta">
+                <span>+ verbs of motion</span><span class="activity-tile__meta-chevron">→</span>
+              </span>
+            </a>
+            <a href="loading.html" class="activity-tile">
+              <span class="activity-tile__title">Tiny yoga together</span>
+              <span class="activity-tile__meta">
+                <span>+ body parts</span><span class="activity-tile__meta-chevron">→</span>
+              </span>
+            </a>
+            <a href="loading.html" class="activity-tile">
+              <span class="activity-tile__title">Build an obstacle course</span>
+              <span class="activity-tile__meta">
+                <span>+ prepositions</span><span class="activity-tile__meta-chevron">→</span>
+              </span>
+            </a>
+          </div>
+        </section>
+
+      </div>
+
+      <div class="summary" style="margin: 0 var(--s-lg);">
         42 words · 18 sentences
         <a href="bank.html">&nbsp;· view vocabulary bank ›</a>
       </div>
+
     </main>
 
     <nav class="tabbar">

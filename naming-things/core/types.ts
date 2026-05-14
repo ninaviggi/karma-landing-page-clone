@@ -78,3 +78,23 @@ export interface Session {
   durationSeconds?: number;
   rating?: 'up' | 'down';
 }
+
+export type AudioFrameType = 'word' | 'sentence' | 'step' | 'wonder';
+
+export interface AudioFrame {
+  id: string;
+  type: AudioFrameType;
+  position: number;
+  totalFrames: number;
+  baseText: string;
+  targetText: string;
+  phonetic?: string;
+  context?: string;
+  instruction?: string;
+  audioBase: string;
+  audioTargetNormal: string;
+  audioTargetSlow: string;
+  pauseAfterBase: number;
+  pauseAfterNormal: number;
+  pauseAfterSlow: number;
+}

@@ -1,5 +1,5 @@
 import type { GeneratedActivity } from '@core/index';
-import { activityToFrames, type Frame } from './frames';
+import { activityToHudFrames, type HudFrame } from './frames';
 
 // Placeholder Even Hub integration. The real implementation will
 // import the Even SDK and render frames to the HUD.
@@ -16,7 +16,7 @@ const sleep = (ms: number) =>
   new Promise<void>((resolve) => setTimeout(resolve, ms));
 
 export const playActivity = async (activity: GeneratedActivity): Promise<void> => {
-  const frames = activityToFrames(activity);
+  const frames = activityToHudFrames(activity);
   if (typeof evenHub === 'undefined') {
     console.warn('Even Hub runtime not available; logging frames instead.');
     for (const f of frames) console.log(formatFrame(f));
@@ -30,5 +30,5 @@ export const playActivity = async (activity: GeneratedActivity): Promise<void> =
   await evenHub.clear();
 };
 
-const formatFrame = (f: Frame): string =>
+const formatFrame = (f: HudFrame): string =>
   f.secondary ? `[${f.kind}] ${f.primary} — ${f.secondary}` : `[${f.kind}] ${f.primary}`;

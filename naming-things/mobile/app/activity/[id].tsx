@@ -1,5 +1,5 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
   Pressable,
@@ -10,10 +10,13 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useKeepAwake } from 'expo-keep-awake';
 import { ActivityCard } from '@/components/ActivityCard';
+import { AudioModeView } from '@/components/AudioModeView';
+import { ModeToggle, type Mode } from '@/components/ModeToggle';
 import { theme } from '@/constants/theme';
 import { sqliteAdapter as storage } from '@/platform/storage';
 import { stopSpeaking } from '@/platform/audio';
 import { getSession, type Session } from '@core/index';
+import { useAudioStore } from '@/stores/audioStore';
 import { useUserStore } from '@/stores/userStore';
 
 export default function ActivityScreen() {
@@ -23,6 +26,12 @@ export default function ActivityScreen() {
   const prefs = useUserStore((s) => s.prefs);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
+  const [mode, setMode] = useState<Mode>('screen');
+
+  const prepareAudio = useAudioStore((s) => s.prepare);
+  const resetAudio = useAudioStore((s) => s.reset);
+  const playAudio = useAudioStore((s) => s.play);
+  const audioStatus = useAudioStore((s) => s.status);
 
   useEffect(() => {
     let cancelled = false;
@@ -37,8 +46,23 @@ export default function ActivityScreen() {
     return () => {
       cancelled = true;
       stopSpeaking();
+      resetAudio();
     };
-  }, [id]);
+  }, [id, resetAudio]);
+
+  const startAudio = useMemo(
+    () => async () => {
+      if (!session || !prefs) return;
+      setMode('audio');
+      await prepareAudio({
+        activity: session.generated,
+        baseLanguage: prefs.baseLanguage,
+        learningLanguage: prefs.learningLanguage,
+      });
+      await playAudio();
+    },
+    [session, prefs, prepareAudio, playAudio]
+  );
 
   if (loading) {
     return (
@@ -59,6 +83,15 @@ export default function ActivityScreen() {
     );
   }
 
+  const handleModeChange = (next: Mode) => {
+    if (next === 'audio') {
+      void startAudio();
+    } else {
+      setMode('screen');
+      resetAudio();
+    }
+  };
+
   return (
     <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
       <View style={styles.topbar}>
@@ -69,14 +102,31 @@ export default function ActivityScreen() {
         >
           <Text style={styles.backLinkText}>← Done</Text>
         </Pressable>
-        <Text style={styles.activityText} numberOfLines={1}>
-          {session.activityText}
-        </Text>
+        <ModeToggle value={mode} onChange={handleModeChange} />
       </View>
-      <ActivityCard
-        activity={session.generated}
-        language={prefs?.learningLanguage ?? 'fr'}
-      />
+
+      {mode === 'screen' ? (
+        <>
+          <ActivityCard
+            activity={session.generated}
+            language={prefs?.learningLanguage ?? 'fr'}
+          />
+          <View style={styles.audioCta}>
+            <Pressable
+              onPress={startAudio}
+              style={({ pressed }) => [styles.cta, pressed && styles.ctaPressed]}
+            >
+              <Text style={styles.ctaText}>
+                {audioStatus === 'preparing'
+                  ? 'Preparing audio...'
+                  : 'Start audio mode'}
+              </Text>
+            </Pressable>
+          </View>
+        </>
+      ) : (
+        <AudioModeView onClose={() => handleModeChange('screen')} />
+      )}
     </SafeAreaView>
   );
 }
@@ -100,6 +150,7 @@ const styles = StyleSheet.create({
     borderBottomColor: theme.colors.border,
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     gap: theme.spacing.md,
   },
   backLink: {
@@ -110,11 +161,25 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
   },
-  activityText: {
-    flex: 1,
-    fontSize: 13,
-    color: theme.colors.textTertiary,
-    textAlign: 'right',
+  audioCta: {
+    paddingHorizontal: theme.spacing.lg,
+    paddingVertical: theme.spacing.md,
+    borderTopWidth: 1,
+    borderTopColor: theme.colors.border,
+  },
+  cta: {
+    backgroundColor: theme.colors.accent,
+    borderRadius: theme.radius.full,
+    paddingVertical: theme.spacing.md,
+    alignItems: 'center',
+  },
+  ctaPressed: {
+    opacity: 0.85,
+  },
+  ctaText: {
+    color: theme.colors.white,
+    fontSize: 16,
+    fontWeight: '600',
   },
   missing: {
     fontSize: 16,

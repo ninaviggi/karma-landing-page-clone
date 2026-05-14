@@ -6,3 +6,4 @@ export * from './storage';
 export * from './sessions';
 export * from './vocab';
 export * from './audio';
+export * from './audioQueue';

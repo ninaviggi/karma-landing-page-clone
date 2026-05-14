@@ -1,9 +1,9 @@
 import { useRouter } from 'expo-router';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ActivityList } from '@/components/ActivityList';
+import { ActivityRow } from '@/components/ActivityRow';
 import { GenerateInput } from '@/components/GenerateInput';
-import { DEFAULT_SUGGESTIONS } from '@/constants/suggestions';
+import { HOME_CATEGORIES } from '@/constants/suggestions';
 import { LANGUAGES } from '@core/index';
 import { theme } from '@/constants/theme';
 import { useSessionStore } from '@/stores/sessionStore';
@@ -33,15 +33,18 @@ export default function Home() {
       <ScrollView
         contentContainerStyle={styles.scroll}
         keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
       >
-        <View style={styles.header}>
-          <View>
-            <Text style={styles.kicker}>NAMING THINGS</Text>
-            <Text style={styles.languagePill}>{learningLabel}</Text>
+        <View style={styles.padded}>
+          <View style={styles.header}>
+            <View>
+              <Text style={styles.kicker}>NAMING THINGS</Text>
+              <Text style={styles.languagePill}>{learningLabel}</Text>
+            </View>
           </View>
         </View>
 
-        <View style={styles.promptBlock}>
+        <View style={[styles.padded, styles.promptBlock]}>
           <Text style={styles.prompt}>What are we doing?</Text>
           <GenerateInput
             onGenerate={handleGenerate}
@@ -50,15 +53,19 @@ export default function Home() {
           {error ? <Text style={styles.error}>{error}</Text> : null}
         </View>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionLabel}>TRY SOMETHING NEW</Text>
-          <ActivityList
-            items={DEFAULT_SUGGESTIONS}
-            onSelect={handleGenerate}
-          />
+        <View style={styles.sections}>
+          {HOME_CATEGORIES.map((cat) => (
+            <ActivityRow
+              key={cat.id}
+              title={cat.title}
+              subtitle={cat.subtitle}
+              items={cat.items}
+              onSelect={handleGenerate}
+            />
+          ))}
         </View>
 
-        <View style={styles.summary}>
+        <View style={[styles.padded, styles.summary]}>
           <Text style={styles.summaryText}>
             {totals.words} words · {totals.sentences} sentences
           </Text>
@@ -74,9 +81,12 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.background,
   },
   scroll: {
-    padding: theme.spacing.lg,
-    gap: theme.spacing.xl,
+    paddingTop: theme.spacing.lg,
     paddingBottom: theme.spacing.xxl,
+    gap: theme.spacing.xl,
+  },
+  padded: {
+    paddingHorizontal: theme.spacing.lg,
   },
   header: {
     flexDirection: 'row',
@@ -107,14 +117,8 @@ const styles = StyleSheet.create({
     color: '#A02020',
     fontSize: 13,
   },
-  section: {
-    gap: theme.spacing.md,
-  },
-  sectionLabel: {
-    fontSize: 11,
-    letterSpacing: 2,
-    color: theme.colors.textTertiary,
-    fontWeight: '600',
+  sections: {
+    gap: theme.spacing.xl,
   },
   summary: {
     paddingTop: theme.spacing.lg,

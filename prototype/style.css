@@ -1,0 +1,664 @@
+:root {
+  --bg: #FAFAF8;
+  --surface: #F0EEEA;
+  --surface-hover: #E5E2DC;
+  --text: #1A1A1A;
+  --text-secondary: #6B6560;
+  --text-tertiary: #9B9590;
+  --accent: #2D4A3E;
+  --accent-light: #E8F0EB;
+  --border: #E5E2DC;
+  --white: #FFFFFF;
+  --error: #A02020;
+
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 16px;
+  --r-full: 999px;
+
+  --s-xs: 4px;
+  --s-sm: 8px;
+  --s-md: 16px;
+  --s-lg: 24px;
+  --s-xl: 32px;
+  --s-xxl: 48px;
+
+  --font: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica,
+    Inter, Arial, sans-serif;
+  --font-mono: "SF Mono", Menlo, Consolas, monospace;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font);
+  color: var(--text);
+  background: #efece6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Phone frame ------------------------------------------------------------- */
+
+.frame {
+  max-width: 420px;
+  min-height: 100vh;
+  margin: 0 auto;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  box-shadow: 0 8px 40px rgba(20, 16, 10, 0.06);
+}
+
+@media (min-width: 720px) {
+  body {
+    padding: var(--s-xl) 0;
+  }
+  .frame {
+    min-height: calc(100vh - var(--s-xl) * 2);
+    border-radius: var(--r-lg);
+    overflow: hidden;
+  }
+}
+
+.screen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: var(--s-lg);
+  padding-bottom: 96px;
+  gap: var(--s-xl);
+  overflow-y: auto;
+}
+
+.screen--no-pad {
+  padding: 0;
+  padding-bottom: 96px;
+}
+
+/* Typography -------------------------------------------------------------- */
+
+.kicker {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--text-tertiary);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+h1.title {
+  font-size: 28px;
+  line-height: 1.2;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+h2.section-label {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--text-tertiary);
+  font-weight: 600;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 16px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Header ------------------------------------------------------------------ */
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--s-md);
+}
+
+.language-pill {
+  font-size: 13px;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* Buttons / chips --------------------------------------------------------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: var(--accent);
+  color: var(--white);
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: var(--r-full);
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity 0.15s ease;
+}
+
+.btn:active {
+  opacity: 0.85;
+}
+
+.btn--block {
+  width: 100%;
+  padding: 14px 20px;
+  font-size: 16px;
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--accent);
+  padding: 6px 0;
+}
+
+.chip {
+  display: inline-block;
+  padding: 8px 14px;
+  border-radius: var(--r-full);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  font-size: 14px;
+  color: var(--text);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.chip:active {
+  background: var(--surface-hover);
+}
+
+.chip--active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--white);
+  font-weight: 600;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-sm);
+}
+
+/* Inputs ------------------------------------------------------------------ */
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-sm);
+}
+
+.field__label {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--text-tertiary);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.input {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 14px 16px;
+  font-size: 16px;
+  font-family: var(--font);
+  color: var(--text);
+  width: 100%;
+}
+
+.input:focus {
+  outline: 2px solid var(--accent-light);
+  border-color: var(--accent);
+}
+
+.input--multiline {
+  min-height: 60px;
+  resize: vertical;
+}
+
+/* Generate input box ------------------------------------------------------ */
+
+.generate-box {
+  background: var(--white);
+  border-radius: var(--r-lg);
+  border: 1px solid var(--border);
+  padding: var(--s-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-md);
+}
+
+.generate-box textarea {
+  border: none;
+  font-size: 17px;
+  color: var(--text);
+  resize: none;
+  min-height: 60px;
+  font-family: var(--font);
+  width: 100%;
+  background: transparent;
+}
+
+.generate-box textarea:focus {
+  outline: none;
+}
+
+.generate-box__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--s-sm);
+}
+
+.generate-box__hint {
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+
+/* Vocab grid -------------------------------------------------------------- */
+
+.vocab-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--s-sm);
+}
+
+.vocab-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: var(--s-md);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--s-sm);
+  min-height: 96px;
+}
+
+.vocab-card__text {
+  flex: 1;
+  min-width: 0;
+}
+
+.vocab-card__word {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.vocab-card__translation {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: 2px 0 0;
+}
+
+.vocab-card__phonetic {
+  font-size: 12px;
+  font-family: var(--font-mono);
+  color: var(--text-tertiary);
+  margin: 4px 0 0;
+}
+
+/* Audio button ------------------------------------------------------------ */
+
+.audio-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--accent-light);
+  color: var(--accent);
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.audio-btn:active {
+  opacity: 0.7;
+}
+
+.audio-btn--lg {
+  width: 40px;
+  height: 40px;
+  font-size: 18px;
+}
+
+/* Sentence card ----------------------------------------------------------- */
+
+.sentence-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: var(--s-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-xs);
+}
+
+.sentence-card__head {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--s-sm);
+  align-items: flex-start;
+}
+
+.sentence-card__sentence {
+  flex: 1;
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.sentence-card__translation {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.sentence-card__context {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  font-style: italic;
+  margin: var(--s-xs) 0 0;
+}
+
+/* Step card --------------------------------------------------------------- */
+
+.step-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: var(--s-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-sm);
+  cursor: pointer;
+}
+
+.step-card--active {
+  background: var(--accent-light);
+  border-color: var(--accent);
+}
+
+.step-card__row {
+  display: flex;
+  gap: var(--s-md);
+  align-items: flex-start;
+}
+
+.step-card__number {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-tertiary);
+  width: 24px;
+  flex-shrink: 0;
+  padding-top: 2px;
+}
+
+.step-card__instruction {
+  flex: 1;
+  font-size: 16px;
+  line-height: 1.4;
+  color: var(--text);
+}
+
+.step-card__expanded {
+  padding-left: calc(24px + var(--s-md));
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-xs);
+}
+
+.step-card__prompt-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--s-sm);
+}
+
+.step-card__prompt {
+  flex: 1;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--accent);
+}
+
+.step-card__translation {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* Wonder card ------------------------------------------------------------- */
+
+.wonder-card {
+  background: var(--accent);
+  color: var(--white);
+  border-radius: var(--r-md);
+  padding: var(--s-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-sm);
+}
+
+.wonder-card__label {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--accent-light);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.wonder-card__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--s-sm);
+}
+
+.wonder-card__question {
+  flex: 1;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.35;
+  margin: 0;
+}
+
+.wonder-card__translation {
+  font-size: 14px;
+  color: var(--accent-light);
+  margin: 0;
+}
+
+.wonder-card .audio-btn {
+  background: rgba(255, 255, 255, 0.15);
+  color: var(--white);
+}
+
+/* Sections / stacks ------------------------------------------------------- */
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-md);
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-sm);
+}
+
+.stack--md {
+  gap: var(--s-md);
+}
+
+/* Top bar (activity screen) ----------------------------------------------- */
+
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: var(--s-md);
+  padding: var(--s-md) var(--s-lg);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.topbar__back {
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.topbar__title {
+  flex: 1;
+  text-align: right;
+  font-size: 13px;
+  color: var(--text-tertiary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Vocab summary ----------------------------------------------------------- */
+
+.summary {
+  padding-top: var(--s-lg);
+  border-top: 1px solid var(--border);
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.summary a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+/* Tab bar (bottom nav) ---------------------------------------------------- */
+
+.tabbar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  padding: var(--s-sm) 0 calc(var(--s-md) + env(safe-area-inset-bottom));
+}
+
+.tabbar__item {
+  flex: 1;
+  text-align: center;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  color: var(--text-tertiary);
+  font-weight: 600;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: var(--s-sm);
+}
+
+.tabbar__item--active {
+  color: var(--accent);
+}
+
+/* Bank tab toggle --------------------------------------------------------- */
+
+.bank-tabs {
+  display: flex;
+  gap: var(--s-sm);
+}
+
+/* Empty state ------------------------------------------------------------- */
+
+.empty {
+  padding: var(--s-xl);
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+/* Progress stats ---------------------------------------------------------- */
+
+.stat-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: var(--s-lg);
+}
+
+.stat-card__value {
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.stat-card__label {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: var(--s-xs);
+}
+
+.note {
+  font-size: 14px;
+  color: var(--text-tertiary);
+  font-style: italic;
+  text-align: center;
+  padding: 0 var(--s-lg);
+}
+
+/* Meta line under cards in bank */
+
+.meta {
+  font-size: 11px;
+  color: var(--text-tertiary);
+  margin-top: var(--s-xs);
+  padding-left: var(--s-xs);
+}
+
+/* Prototype banner -------------------------------------------------------- */
+
+.proto-banner {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  background: rgba(26, 26, 26, 0.85);
+  color: white;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  padding: 8px 14px;
+  border-radius: var(--r-full);
+  z-index: 100;
+  pointer-events: none;
+  font-weight: 600;
+  text-transform: uppercase;
+}

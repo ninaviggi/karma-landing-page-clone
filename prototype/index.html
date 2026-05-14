@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Naming Things — Prototype</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      background: var(--bg);
+      padding: var(--s-xl) var(--s-lg);
+    }
+    .hub {
+      max-width: 880px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: var(--s-xl);
+    }
+    .hub__head {
+      display: flex;
+      flex-direction: column;
+      gap: var(--s-sm);
+    }
+    .hub__grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: var(--s-md);
+    }
+    .hub__card {
+      display: flex;
+      flex-direction: column;
+      gap: var(--s-sm);
+      padding: var(--s-lg);
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      text-decoration: none;
+      color: var(--text);
+      transition: border-color 0.15s ease, transform 0.15s ease;
+    }
+    .hub__card:hover {
+      border-color: var(--accent);
+      transform: translateY(-1px);
+    }
+    .hub__card-num {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-tertiary);
+    }
+    .hub__card-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+    .hub__card-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+    .hub__note {
+      font-size: 13px;
+      color: var(--text-tertiary);
+      line-height: 1.6;
+    }
+    .hub__note code {
+      font-family: var(--font-mono);
+      background: var(--surface);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="hub">
+    <header class="hub__head">
+      <span class="kicker">Naming Things · Prototype v0.1</span>
+      <h1 class="title">A bilingual activity guide for parents learning alongside their child.</h1>
+      <p class="subtitle">Static mockup of the mobile screens. Open any screen below — they link to each other.</p>
+    </header>
+
+    <nav class="hub__grid">
+      <a href="onboarding.html" class="hub__card">
+        <span class="hub__card-num">01</span>
+        <span class="hub__card-title">Onboarding</span>
+        <span class="hub__card-desc">First launch. Set learning language, child's age, optional name.</span>
+      </a>
+      <a href="home.html" class="hub__card">
+        <span class="hub__card-num">02</span>
+        <span class="hub__card-title">Home</span>
+        <span class="hub__card-desc">"What are we doing?" — text input and activity suggestions.</span>
+      </a>
+      <a href="activity.html" class="hub__card">
+        <span class="hub__card-num">03</span>
+        <span class="hub__card-title">Activity card</span>
+        <span class="hub__card-desc">Generated bilingual guide: vocab, sentences, steps, wonder question.</span>
+      </a>
+      <a href="bank.html" class="hub__card">
+        <span class="hub__card-num">04</span>
+        <span class="hub__card-title">Vocabulary bank</span>
+        <span class="hub__card-desc">Persistent library of every word and sentence learned, tagged by activity.</span>
+      </a>
+      <a href="progress.html" class="hub__card">
+        <span class="hub__card-num">05</span>
+        <span class="hub__card-title">Progress</span>
+        <span class="hub__card-desc">Quiet stats — no badges, no streaks. Just growth.</span>
+      </a>
+    </nav>
+
+    <p class="hub__note">
+      This is a static HTML mockup using the production design tokens (warm off-white, sand surfaces, deep forest accent).
+      The real app is in <code>naming-things/</code> — React Native + Expo, with Claude-generated activities and SQLite-backed vocab.
+      Audio buttons here are visual only; in the real app they speak the word via platform TTS.
+    </p>
+  </div>
+</body>
+</html>

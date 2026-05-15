@@ -1,0 +1,13 @@
+{
+  "name": "naming-things-root",
+  "private": true,
+  "type": "module",
+  "description": "Workspace root — only used for cross-package dev scripts (e.g. test-generate). The real app lives in mobile/.",
+  "scripts": {
+    "test-generate": "tsx scripts/test-generate.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "tsx": "^4.7.0"
+  }
+}

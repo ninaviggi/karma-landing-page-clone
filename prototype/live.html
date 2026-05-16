@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Naming Things — Live</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .live-key-bar {
+      display: flex;
+      align-items: center;
+      gap: var(--s-sm);
+      padding: var(--s-sm) var(--s-md);
+      background: var(--surface);
+      border-radius: var(--r-sm);
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    .live-key-bar__dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+    .live-key-bar__dot--ok { background: #2D6A3E; }
+    .live-key-bar__dot--missing { background: #B85C3A; }
+    .live-key-bar__link {
+      margin-left: auto;
+      color: var(--accent);
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .live-controls {
+      display: flex;
+      gap: var(--s-sm);
+      flex-wrap: wrap;
+    }
+    .live-controls select,
+    .live-controls input[type="number"] {
+      flex: 1;
+      min-width: 100px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--r-sm);
+      padding: 10px 12px;
+      font-family: var(--font);
+      font-size: 14px;
+      color: var(--text);
+    }
+    .live-controls label {
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      color: var(--text-tertiary);
+      font-weight: 600;
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: var(--s-xs);
+    }
+    .live-controls__field {
+      flex: 1;
+      min-width: 130px;
+    }
+
+    .live-status {
+      padding: var(--s-md);
+      border-radius: var(--r-sm);
+      font-size: 13px;
+    }
+    .live-status--loading {
+      background: var(--surface);
+      color: var(--text-secondary);
+      font-style: italic;
+    }
+    .live-status--error {
+      background: #FBEAE5;
+      color: #8A3A1A;
+    }
+
+    .live-warning {
+      font-size: 11px;
+      color: var(--text-tertiary);
+      line-height: 1.5;
+      padding: var(--s-sm) 0;
+    }
+
+    .key-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(20, 16, 10, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+      padding: var(--s-lg);
+    }
+    .key-modal__panel {
+      background: var(--white);
+      border-radius: var(--r-md);
+      padding: var(--s-lg);
+      max-width: 380px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: var(--s-md);
+    }
+    .key-modal__title {
+      font-size: 18px;
+      font-weight: 700;
+      margin: 0;
+    }
+    .key-modal__body {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      margin: 0;
+    }
+    .key-modal input {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--r-sm);
+      padding: 12px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+    }
+    .key-modal__actions {
+      display: flex;
+      gap: var(--s-sm);
+      justify-content: flex-end;
+    }
+    .key-modal__btn--secondary {
+      background: transparent;
+      color: var(--text-secondary);
+      padding: 10px 16px;
+      border: none;
+      cursor: pointer;
+      font-family: var(--font);
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <main class="screen" id="screen">
+
+      <header class="header">
+        <div>
+          <div class="kicker">Naming Things · Live</div>
+          <div class="language-pill" id="lang-pill">French</div>
+        </div>
+      </header>
+
+      <section style="display: flex; flex-direction: column; gap: var(--s-md);">
+        <h1 class="title">What are we doing?</h1>
+
+        <div class="live-key-bar" id="key-bar">
+          <span class="live-key-bar__dot" id="key-dot"></span>
+          <span id="key-status">Checking API key...</span>
+          <a class="live-key-bar__link" id="change-key">Set key</a>
+        </div>
+
+        <div class="generate-box">
+          <textarea id="activity" placeholder="Type what we're doing..." rows="2">bake chocolate chip cookies</textarea>
+          <div class="live-controls">
+            <div class="live-controls__field">
+              <label for="language">Language</label>
+              <select id="language">
+                <option value="fr">French</option>
+                <option value="es">Spanish</option>
+                <option value="it">Italian</option>
+                <option value="de">German</option>
+                <option value="pt">Portuguese</option>
+                <option value="zh">Mandarin</option>
+                <option value="ja">Japanese</option>
+              </select>
+            </div>
+            <div class="live-controls__field">
+              <label for="age">Child age</label>
+              <input id="age" type="number" min="2" max="10" value="4">
+            </div>
+          </div>
+          <div class="generate-box__footer">
+            <span class="generate-box__hint">Real Claude call · streams to this page</span>
+            <button id="generate" class="btn">Generate →</button>
+          </div>
+        </div>
+
+        <p class="live-warning">
+          ⚠ API key stored in this browser's localStorage. Open locally only — do not share or host this page.
+        </p>
+      </section>
+
+      <div id="result"></div>
+
+    </main>
+  </div>
+  <div class="proto-banner">Prototype · Live</div>
+
+  <div class="key-modal" id="key-modal" style="display: none;">
+    <div class="key-modal__panel">
+      <h2 class="key-modal__title">Claude API key</h2>
+      <p class="key-modal__body">
+        Paste your Anthropic API key. It's saved in your browser's
+        localStorage only — never sent anywhere except api.anthropic.com.
+      </p>
+      <input id="key-input" type="password" placeholder="sk-ant-..." autocomplete="off">
+      <div class="key-modal__actions">
+        <button class="key-modal__btn--secondary" id="key-cancel">Cancel</button>
+        <button class="btn" id="key-save">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const LANGUAGES = {
+      en: 'English',
+      fr: 'French',
+      es: 'Spanish',
+      it: 'Italian',
+      de: 'German',
+      pt: 'Portuguese',
+      zh: 'Mandarin',
+      ja: 'Japanese',
+    };
+
+    const KEY_STORAGE = 'naming_things_claude_key';
+    const MODEL = 'claude-sonnet-4-6';
+
+    const $ = (id) => document.getElementById(id);
+    const getKey = () => localStorage.getItem(KEY_STORAGE) || '';
+    const setKey = (k) => localStorage.setItem(KEY_STORAGE, k);
+
+    function refreshKeyBar() {
+      const has = !!getKey();
+      $('key-dot').className = 'live-key-bar__dot ' + (has ? 'live-key-bar__dot--ok' : 'live-key-bar__dot--missing');
+      $('key-status').textContent = has ? 'API key set' : 'No API key — click Set key';
+      $('change-key').textContent = has ? 'Change' : 'Set key';
+    }
+
+    function openKeyModal() {
+      $('key-input').value = getKey();
+      $('key-modal').style.display = 'flex';
+      $('key-input').focus();
+    }
+    function closeKeyModal() { $('key-modal').style.display = 'none'; }
+
+    $('change-key').addEventListener('click', (e) => { e.preventDefault(); openKeyModal(); });
+    $('key-cancel').addEventListener('click', closeKeyModal);
+    $('key-save').addEventListener('click', () => {
+      setKey($('key-input').value.trim());
+      refreshKeyBar();
+      closeKeyModal();
+    });
+
+    $('language').addEventListener('change', () => {
+      $('lang-pill').textContent = LANGUAGES[$('language').value];
+    });
+
+    function buildSystemPrompt(learningCode, age, previousVocab) {
+      const learning = LANGUAGES[learningCode];
+      const base = 'English';
+      const previous = previousVocab.length > 0 ? previousVocab.join(', ') : '(none yet)';
+      return `You are a bilingual activity designer for a family learning ${learning} together. The parent speaks ${base} and is learning ${learning} with their child (age ${age}).
+
+The family has already learned these words: ${previous}
+
+Generate a NEW activity based on the description below. Use at least 50% new vocabulary not in the previous list. Build on what they already know where natural.
+
+Respond ONLY with valid JSON matching this exact schema:
+{
+  "title": string,
+  "vocabulary": Array<{ "word": string, "translation": string, "phonetic": string }>,
+  "sentences": Array<{ "sentence": string, "translation": string, "context": string }>,
+  "steps": Array<{ "instruction": string, "languagePrompt": string, "translation": string }>,
+  "wonderQuestion": { "question": string, "translation": string }
+}
+
+Rules:
+- "word" and "sentence" and "languagePrompt" and "question" are in ${learning}.
+- "translation" fields are in ${base}.
+- Vocabulary: 6-8 words, simple and concrete.
+- Sentences: 3-5 phrases the parent can use DURING the activity.
+- Steps: 4-6 instructions with embedded language prompts.
+- Wonder: 1 open-ended question to spark conversation; not answerable with just vocabulary.
+- All phonetic guides should be intuitive for ${base} speakers.
+- Language complexity appropriate for age ${age}.
+- Sentences should feel natural, not textbook.
+- Output the JSON object only. No prose, no markdown fences.`;
+    }
+
+    function extractJson(text) {
+      const t = text.trim();
+      if (t.startsWith('{')) return t;
+      const fence = t.match(/```(?:json)?\s*([\s\S]*?)```/);
+      if (fence) return fence[1].trim();
+      const first = t.indexOf('{');
+      const last = t.lastIndexOf('}');
+      if (first !== -1 && last !== -1 && last > first) return t.slice(first, last + 1);
+      return t;
+    }
+
+    function esc(s) {
+      return String(s).replace(/[&<>"']/g, (c) => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[c]));
+    }
+
+    function renderActivity(a) {
+      const vocab = a.vocabulary.map((v) => `
+        <div class="vocab-card">
+          <div class="vocab-card__text">
+            <p class="vocab-card__word">${esc(v.word)}</p>
+            <p class="vocab-card__translation">${esc(v.translation)}</p>
+            <p class="vocab-card__phonetic">${esc(v.phonetic)}</p>
+          </div>
+          <button class="audio-btn" aria-label="Play">♪</button>
+        </div>
+      `).join('');
+
+      const sentences = a.sentences.map((s) => `
+        <div class="sentence-card">
+          <div class="sentence-card__head">
+            <p class="sentence-card__sentence">“${esc(s.sentence)}”</p>
+            <button class="audio-btn" aria-label="Play">♪</button>
+          </div>
+          <p class="sentence-card__translation">${esc(s.translation)}</p>
+          ${s.context ? `<p class="sentence-card__context">· ${esc(s.context)}</p>` : ''}
+        </div>
+      `).join('');
+
+      const steps = a.steps.map((step, i) => `
+        <div class="step-card step-card--active">
+          <div class="step-card__row">
+            <span class="step-card__number">${String(i + 1).padStart(2, '0')}</span>
+            <span class="step-card__instruction">${esc(step.instruction)}</span>
+          </div>
+          <div class="step-card__expanded">
+            <div class="step-card__prompt-row">
+              <span class="step-card__prompt">${esc(step.languagePrompt)}</span>
+              <button class="audio-btn" aria-label="Play">♪</button>
+            </div>
+            <span class="step-card__translation">${esc(step.translation)}</span>
+          </div>
+        </div>
+      `).join('');
+
+      return `
+        <h1 class="title" style="margin-top: var(--s-xl);">${esc(a.title)}</h1>
+        <section class="section" style="margin-top: var(--s-md);">
+          <h2 class="section-label">Vocabulary</h2>
+          <div class="vocab-grid">${vocab}</div>
+        </section>
+        <section class="section" style="margin-top: var(--s-xl);">
+          <h2 class="section-label">Sentences</h2>
+          <div class="stack">${sentences}</div>
+        </section>
+        <section class="section" style="margin-top: var(--s-xl);">
+          <h2 class="section-label">Steps</h2>
+          <div class="stack">${steps}</div>
+        </section>
+        <div class="wonder-card" style="margin-top: var(--s-xl);">
+          <span class="wonder-card__label">Wonder</span>
+          <div class="wonder-card__head">
+            <p class="wonder-card__question">${esc(a.wonderQuestion.question)}</p>
+            <button class="audio-btn" aria-label="Play">♪</button>
+          </div>
+          <p class="wonder-card__translation">${esc(a.wonderQuestion.translation)}</p>
+        </div>
+      `;
+    }
+
+    async function generate() {
+      const apiKey = getKey();
+      if (!apiKey) { openKeyModal(); return; }
+
+      const activity = $('activity').value.trim();
+      if (!activity) return;
+      const lang = $('language').value;
+      const age = parseInt($('age').value, 10) || 4;
+
+      const btn = $('generate');
+      btn.disabled = true;
+      btn.textContent = 'Generating...';
+      $('result').innerHTML = '<div class="live-status live-status--loading">Calling Claude · this usually takes 3–5 seconds…</div>';
+
+      try {
+        const resp = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': apiKey,
+            'anthropic-version': '2023-06-01',
+            'anthropic-dangerous-direct-browser-access': 'true',
+          },
+          body: JSON.stringify({
+            model: MODEL,
+            max_tokens: 2048,
+            system: buildSystemPrompt(lang, age, []),
+            messages: [{ role: 'user', content: `Activity: ${activity}` }],
+          }),
+        });
+
+        if (!resp.ok) {
+          const errText = await resp.text();
+          throw new Error(`Claude API error ${resp.status}: ${errText.slice(0, 200)}`);
+        }
+
+        const data = await resp.json();
+        const textBlock = (data.content || []).find((c) => c.type === 'text');
+        if (!textBlock || !textBlock.text) throw new Error('Empty response from Claude');
+
+        const parsed = JSON.parse(extractJson(textBlock.text));
+
+        $('result').innerHTML = renderActivity(parsed);
+        $('screen').scrollTo({ top: $('result').offsetTop - 40, behavior: 'smooth' });
+      } catch (err) {
+        $('result').innerHTML = `<div class="live-status live-status--error">⚠ ${esc(err.message)}</div>`;
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Generate →';
+      }
+    }
+
+    $('generate').addEventListener('click', generate);
+    $('activity').addEventListener('keydown', (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') generate();
+    });
+
+    refreshKeyBar();
+  </script>
+</body>
+</html>

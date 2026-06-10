@@ -255,6 +255,10 @@
       $('lang-pill').textContent = LANGUAGES[$('language').value];
     });
 
+    // ⚠ SYNC WARNING: this is a hand-copied duplicate of
+    // naming-things/core/prompts.ts (buildSystemPrompt). If you change
+    // the prompt there, update this function too — there is no build
+    // step keeping them aligned.
     function buildSystemPrompt(learningCode, age, previousVocab) {
       const learning = LANGUAGES[learningCode];
       const base = 'English';

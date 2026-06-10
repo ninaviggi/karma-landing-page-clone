@@ -8,21 +8,18 @@ import {
   type LanguageCode,
 } from '@core/index';
 
+// Metro resolves require() statically at bundle time, so we can't
+// require the chime MP3s until the files actually exist in
+// assets/sounds/ — a missing file fails the whole build, try/catch
+// notwithstanding. Once the four MP3s land (see assets/sounds/README.md),
+// replace these nulls with require('../assets/sounds/chime-word.mp3') etc.
 const CHIMES: Record<AudioFrameType | 'complete', number | null> = {
-  word: requireSafe(() => require('../assets/sounds/chime-word.mp3')),
-  sentence: requireSafe(() => require('../assets/sounds/chime-sentence.mp3')),
-  step: requireSafe(() => require('../assets/sounds/chime-step.mp3')),
-  wonder: requireSafe(() => require('../assets/sounds/chime-sentence.mp3')),
-  complete: requireSafe(() => require('../assets/sounds/chime-complete.mp3')),
+  word: null,
+  sentence: null,
+  step: null,
+  wonder: null,
+  complete: null,
 };
-
-function requireSafe(fn: () => number): number | null {
-  try {
-    return fn();
-  } catch {
-    return null;
-  }
-}
 
 let audioModeReady: Promise<void> | null = null;
 const ensureAudioMode = (): Promise<void> => {
@@ -70,23 +67,37 @@ const playFile = async (
   const { sound } = await Audio.Sound.createAsync(source as any, {
     shouldPlay: true,
   });
-  const onAbort = () => {
-    sound.stopAsync().catch(() => {});
-  };
-  signal?.addEventListener('abort', onAbort);
   try {
     await new Promise<void>((resolve, reject) => {
+      const onAbort = () => {
+        sound.stopAsync().catch(() => {});
+        // stopAsync never reports didJustFinish, so settle here or we
+        // hang forever waiting for a status update that won't come.
+        reject(new AbortError());
+      };
+      signal?.addEventListener('abort', onAbort, { once: true });
+      const settle = (fn: () => void) => {
+        signal?.removeEventListener('abort', onAbort);
+        fn();
+      };
       sound.setOnPlaybackStatusUpdate((status) => {
-        if (!status.isLoaded) return;
-        if (status.didJustFinish) resolve();
-        if ('error' in status && status.error) reject(new Error(status.error));
+        if (!status.isLoaded) {
+          if ('error' in status && status.error) {
+            settle(() => reject(new Error(status.error)));
+          }
+          return;
+        }
+        if (status.didJustFinish) settle(resolve);
       });
+      // A very short file can finish before the listener attaches and
+      // would never emit another update — check the current status once.
+      sound.getStatusAsync().then((status) => {
+        if (status.isLoaded && status.didJustFinish) settle(resolve);
+      }, () => {});
     });
   } finally {
-    signal?.removeEventListener('abort', onAbort);
     await sound.unloadAsync().catch(() => {});
   }
-  if (signal?.aborted) throw new AbortError();
 };
 
 const speakViaTts = async (

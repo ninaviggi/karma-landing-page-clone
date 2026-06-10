@@ -1,14 +1,13 @@
 import { create } from 'zustand';
 import {
   buildAudioFrames,
-  cacheUri,
   type AudioFrame,
   type GeneratedActivity,
   type LanguageCode,
 } from '@core/index';
 import { playQueue, stopAllAudio } from '@/services/audioPlayer';
 import {
-  ensureCachedAudio,
+  cacheUri,
   isCachingEnabled,
   precacheTexts,
   type BatchProgress,
